@@ -302,3 +302,27 @@ ALTER TABLE
 ALTER TABLE all_users
   ADD COLUMN last_login timestamp NOT NULL DEFAULT NOW();
 ```
+* Adding a new column is the same as the way we define a column when creating a table: Column name, data type, optional constraints.
+
+* NOW() is SQL Function. It provides the current date and time when it is called.
+
+<h2>Removing a column</h2>
+* Example of removing a column:
+```bash
+sql_book=# ALTER TABLE all_users DROP COLUMN enabled;
+ALTER TABLE
+```
+
+<h2>Dropping Tables</h2>
+* Example of deleting a table:
+```bash
+sql_book=# DROP TABLE all_users;
+DROP TABLE
+sql_book=# \d all_users
+Did not find any relation named "all_users".
+```
+
+* `DROP COLUMN` and `DROP TABLE` are not reversible.
+
+<h2>Summary</h2>
+Table that has all statements from this chapter: https://launchschool.com/books/sql/read/alter_table#summary
