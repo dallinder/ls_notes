@@ -278,6 +278,7 @@ ALTER TABLE
 ```
 
 <h2>Changing a columns datatype</h2>
+
 ```bash
 sql_book=# ALTER TABLE all_users
 sql_book-# ALTER COLUMN full_name TYPE VARCHAR(25);
@@ -286,28 +287,37 @@ ALTER TABLE
 
 <h2>Adding a Constraint</h2>
 * Form for adding a column constraint is:
+
 `ALTER TABLE table_name ALTER COLUMN column_name SET CONSTRAINT CLAUSE`
+
 * Form for adding a table constraint is:
+
 `ALTER TABLE table_name ADD CONSTRAINT constraint_name CONSTRAINT CLAUSE`
 
 <h2>Removing a Constraint</h2>
 * Form for removing a column constraint is:
+
 `ALTER TABLE table_name ALTER COLUMN column_name DROP CONSTRIANT`
+
 * Form for removing a table constraint is:
+
 `ALTER TABLE table_name DROP CONSTRAINT constraint_name`
 
 <h2>Adding a column</h2>
 * Example of adding a column:
+
 ```bash
 ALTER TABLE all_users
   ADD COLUMN last_login timestamp NOT NULL DEFAULT NOW();
 ```
+
 * Adding a new column is the same as the way we define a column when creating a table: Column name, data type, optional constraints.
 
 * NOW() is SQL Function. It provides the current date and time when it is called.
 
 <h2>Removing a column</h2>
 * Example of removing a column:
+
 ```bash
 sql_book=# ALTER TABLE all_users DROP COLUMN enabled;
 ALTER TABLE
@@ -315,6 +325,7 @@ ALTER TABLE
 
 <h2>Dropping Tables</h2>
 * Example of deleting a table:
+
 ```bash
 sql_book=# DROP TABLE all_users;
 DROP TABLE
