@@ -169,9 +169,70 @@ another_database=#
  <h2>Delete the Database</h2>
 
  * Use SQL command `DROP DATABASE`
- 
+
 ```bash
 yet_another_database=# DROP DATABASE another_database;
 DROP DATABASE
 yet_another_database=#
 ```
+
+* Use `dropdb`
+
+```bash
+$ dropdb yet_another_database
+```
+
+* `DROP DATABASE` and `dropdb` are permanent and cannot be reversed.
+
+<h1>Create and View Tables</h1>
+<h2>Table Creation Syntax</h2>
+`CREATE TABLE` SQL statement to create a table
+```bash
+CREATE TABLE some_table();
+```
+
+* inside the parenthesis is where you put column information
+* each column is written on a separate line, separated by comma.
+
+```bash
+CREATE TABLE table_name (
+  column_1_name column_1_data_type [constraints, ...]
+  column_2_name column_2_data_type [constraints, ...]
+  .
+  .
+  .
+  constraints
+);
+```
+
+* Column names and data types are a required part of each column definition. Constraints are optional.
+* constraints can be defined either at the column level or the table level.
+<h2>Creating a `users` table</h2>
+SQL statement to create a table, named users, using `CREATE TABLE` statement.
+```bash
+sql_book=# CREATE TABLE users (
+  id serial UNIQUE NOT NULL,
+  username CHAR(25),
+  enabled boolean DEFAULT TRUE
+  );
+```
+1. `CREATE TABLE`: Firstly, `CREATE TABLE users` is the primary commands
+2. `users`: The name of the table that will be created.
+3. `()`: The information in the parentheses is related to the columns in the table.
+4. `id, username, enabled`: The 3 columns of the table.
+5. `serial, CHAR(25), boolean`: These are the data types of the columns.
+6. `NOT NULL, DEFAULT TRUE`: These are constraints.
+7. Each column definition is comma separated, this is the standard in any SQL database management system.
+
+<h2>Data Types</h2>
+* Data Type - classifies particular values that are allowed for that column.
+
+* serial - used to created identifier columns for a PostgreSQL database. These ids are integers, auto-incrementing, and cannot contain a null value.
+* char(N) - information stored in a column can contain strings of up to N characters in length. If a string less that than length N is stored, the remaining string length is filled with space characters.
+* varchar(n) - information stored in a column can contain strings o up to N characters in length. If a string less than N characters is stored, then the remaining string length isn't used.
+* boolean - can only contain two values 'true' or 'false'. In PostgreSQL, booleans are often displayed as t or f.
+* integer or INT - a whole number.
+* decimal(precision, scale) - takes two arguments. first is the max number digits to hold between 1 and 131072 (precision). second is the number of digits to the right of the decimal point to store.
+* timestamp - contains both simple data and time in YYYY-MM-DD HH:MM:SS format.
+
+<h2>Keys and Constraints</h2>
