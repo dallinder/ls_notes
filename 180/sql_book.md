@@ -49,8 +49,17 @@ postgres=# SELECT name FROM people WHERE id = 1;
 ```
 <p>SQL statements always terminate in a semi-colon.</p>
 <p>Another way to write the above example:</p>
+
 ```ruby
 postgres=# SELECT name
 FROM people
 WHERE id = 1;
 ```
+
+<p>`SELECT` statement => used to retrieve data from a database</p>
+<h3>SQL Sub-languages</h3>
+<ul>
+  <li>DDL: Data Definition Language. Used to define the structure of a database and the tables and columns within it.</li>
+  <li>DML: Data Manipulation Language. Used to retrieve or modify data stored in a database. `SELECT` queries are part of DML</li>
+  <li>DCL: Data Control Language. Used to dtermine what various users are allowed to do when interacting with a database.</li>
+</ul>
