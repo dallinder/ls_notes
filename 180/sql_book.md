@@ -236,3 +236,18 @@ sql_book=# CREATE TABLE users (
 * timestamp - contains both simple data and time in YYYY-MM-DD HH:MM:SS format.
 
 <h2>Keys and Constraints</h2>
+* Keys and constrains are rules that define what data values are allowed in certain columns. Important database concept and are part of a database's schema.
+* UNIQUE: Prevents any duplicate values from being entered into that column.
+* NOT NULL: when adding data to the table a value MUST be specified for this column, it cannot be left empty.
+* DEFAULT: If no value is set when a record is created, then the value of `TRUE` is set in that field.
+
+<h2>View the table</h2>
+* `\dt` meta-command shows a list of all the tables, or relations, in a database.
+* `\d` meta-command shows more detailed information about a table. `\d users` for example shows information about the `users` table.
+
+`serial` is a special data type in PostgreSQL. It uses `integer` data type along with a `DEFAULT` constraint and a function called `nextval` which keeps track of the current highest value and increments this by one to be used as the next value.
+
+<h2>Schema and DCL</h2>
+* Although the information displayed by `\dt` and `\d` meta-commands is in a tabular format, it relates to the schema of the the database and not the data.
+
+* Permissions are determined by DCL(Data Control Language)
