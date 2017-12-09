@@ -74,10 +74,10 @@ ls_burger=# SELECT * FROM orders;
 
 <h2>Select All</h2>
 
-`select` = Identifies the type of statement being issued
-`*` = Wild card character that acts as an id for all the columns in a given.
-`FROM` = Another keyword. Used as clause within a `SELECT` statement to id the table which to retrieve the data.
-`orders` = This is the name of the table from which data is retrieved.
+* `select` = Identifies the type of statement being issued
+* `*` = Wild card character that acts as an id for all the columns in a given.
+* `FROM` = Another keyword. Used as clause within a `SELECT` statement to id the table which to retrieve the data.
+* `orders` = This is the name of the table from which data is retrieved.
 
 <h2>Select Columns</h2>
 
