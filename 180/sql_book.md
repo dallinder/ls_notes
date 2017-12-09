@@ -109,3 +109,69 @@ ls_burger=# SELECT customer_name FROM orders WHERE side = 'Fries';
 
 Schema is concerned with the structure of the database.
 Data is concerned with the contents of the database.
+
+<h1>Create and View Databases</h1>
+
+Steps to create a new database:
+
+1. `$ createdb sql_book` - creates the database
+2. `$ psql -d sql_book` - connect to the database via psql console
+  * this opens the psql console and connects to the database specificed by the `d` option
+3. If you see this, everything is working correctly:
+
+```bash
+psql (9.5.3)
+Type "help" for help.
+
+sql_book=#
+```
+
+* Can use `\list` meta-command to see the current list of databases
+
+* Can create database from psql console using the SQL statement `CREATE DATABASE`
+
+```bash
+sql_book=# CREATE DATABASE another_database;
+CREATE DATABASE
+sql_book=#
+```
+
+1. using `CREATE DATABASE` SQL command with `another_database` as the 'name' parameter for the command.
+2. The `CREATE DATABASE` (without the prompt) on the second line is the response returned by PostgreSQL to let us know it has executed the statement successfully
+3. Line 3, the prompt is back and we can issue another command.
+
+* Convention is to use uppercase for SQL statements and lowercase for tables and databases.
+* NOT case sensitive though.
+* Name Parameter to `CREATE DATABASE` is mandatory. There are other optional parameters which set things like encoding, collation, connection limit, etc...
+
+<h3>Database Naming</h3>
+1. Try to keep database names self-descriptive.
+2. Database names should be written in <b>snake_case</b>
+
+<h2>Connecting to a database</h2>
+* When in the psql console, you can connect to a different database using `\c` or `\connect` meta-commands (both do the same thing).
+
+```bash
+sql_book=# \c another_database
+You are now connected to database "another_database" as user "User".
+another_database=#
+```
+1. On the first line we use the meta-command `\c`, passing it to `another database`.
+2. Line 2 informs what you are connected to.
+3. Is the new prompt with the new database.
+
+* Meta-commands, unlike SQL statements do not have ot be terminated with a semi-colon.
+
+* `\c` and `\connect` meta-commands can take other arguments such as 'username', 'host', 'port', etc... When omitted, the command reuses the values from the previous connection.
+* When connecting to a locally installed database, you can generally omit these other arguments.
+* This type of connection is generally required whichever interface you are using to connect to a database, particularly when connecting to databases that are hosted remotely.
+
+ <h2>Delete the Database</h2>
+
+ * Use SQL command `DROP DATABASE`
+ 
+```bash
+yet_another_database=# DROP DATABASE another_database;
+DROP DATABASE
+yet_another_database=#
+```
