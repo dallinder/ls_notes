@@ -30,7 +30,7 @@
   <li>pg_restore</li>
   <li>pg_bench</li>
 </ul>
-<p>`psql` console is essentially a REPL; like IRB</p>
+<p> `psql` console is essentially a REPL; like IRB</p>
 <p>You can call client applications from terminal, not the `psql` prompt</p>
 <p>Uses the native user account to determine who is connecting to it</p>
 <p>Two different types of commands you can issue from the psql console prompt:</p>
@@ -41,12 +41,14 @@
 <h3>Meta-Commands</h3>
 <p>syntax or a psql console meta-command is `\` followed by the command and any optional arguments. Example: `\conninfo`</p>
 <p>Can be used for a number of different things. Connecting to a different database, listing tables, describing the structure of a particular table, setting environment variables, etc...</p>
-<p>`\q` => quits the psql console</p>
+<p> `\q` => quits the psql console</p>
 <h3>SQL Stataements</h3>
 <p>SQL statements are commands issued to the database using SQL syntax.</p>
+
 ```ruby
 postgres=# SELECT name FROM people WHERE id = 1;
 ```
+
 <p>SQL statements always terminate in a semi-colon.</p>
 <p>Another way to write the above example:</p>
 
@@ -56,7 +58,7 @@ FROM people
 WHERE id = 1;
 ```
 
-<p>`SELECT` statement => used to retrieve data from a database</p>
+<p> `SELECT` statement => used to retrieve data from a database</p>
 <h3>SQL Sub-languages</h3>
 <ul>
   <li>DDL: Data Definition Language. Used to define the structure of a database and the tables and columns within it.</li>
