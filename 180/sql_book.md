@@ -65,3 +65,47 @@ WHERE id = 1;
   <li>DML: Data Manipulation Language. Used to retrieve or modify data stored in a database. `SELECT` queries are part of DML</li>
   <li>DCL: Data Control Language. Used to dtermine what various users are allowed to do when interacting with a database.</li>
 </ul>
+
+<h1>SQL Basics</h1>
+
+```bash
+ls_burger=# SELECT * FROM orders;
+```
+
+<h2>Select All</h2>
+
+`select` = Identifies the type of statement being issued
+`*` = Wild card character that acts as an id for all the columns in a given.
+`FROM` = Another keyword. Used as clause within a `SELECT` statement to id the table which to retrieve the data.
+`orders` = This is the name of the table from which data is retrieved.
+
+<h2>Select Columns</h2>
+
+You can select multiple columns by comma-seperating the column names:
+
+```bash
+ls_burger=# SELECT drink, side FROM orders;
+```
+
+<h2>Select rows</h2>
+
+Database tables often use a column such as an `id` column as a means if uniquely identifying a particular row of data. You can add where constraint with `id`, to return the data from all the columns for a row.
+
+```bash
+ls_burger=# SELECT * FROM orders WHERE id = 1;
+```
+
+`=` in SQL - In `WHERE` clause of SQL queries, = is treated as an 'equality' operator in that it compares things.
+
+<h2>Selecting columns and rows</h2>
+
+You can combine syntax for specifying columns and rows.
+
+```bash
+ls_burger=# SELECT customer_name FROM orders WHERE side = 'Fries';
+```
+
+<h2>Data vs Schema</h2>
+
+Schema is concerned with the structure of the database.
+Data is concerned with the contents of the database.
