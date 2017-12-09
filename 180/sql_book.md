@@ -251,3 +251,54 @@ sql_book=# CREATE TABLE users (
 * Although the information displayed by `\dt` and `\d` meta-commands is in a tabular format, it relates to the schema of the the database and not the data.
 
 * Permissions are determined by DCL(Data Control Language)
+
+<h1>Alter a Table</h1>
+* Important to consider how schema changes will affect the data in a table.
+
+<h2>Alter Table Syntax</h2>
+* Existing tables can be altered with `ALTER TABLE` statement. `ALTER TABLE` is part of DDL, and is for altering schema only.
+* Basic format of `ALTER TABLE` statment is:
+* `ALTER TABLE table_to_alter HOW TO CHANGE THE TABLE additional arguments`
+
+<h2>Renaming a table</h2>
+* Tables can be renamed using the `RENAME` clause.
+```bash
+sql_book=# ALTER TABLE users
+sql_book-# RENAME TO all_users;
+ALTER TABLE
+```
+
+<h2>Renaming a column</h2>
+* You can use `RENAME` clause to rename a specific column within the table.
+
+```bash
+sql_book=# ALTER TABLE all_users
+sql_book-# RENAME COLUMN username TO full_name;
+ALTER TABLE
+```
+
+<h2>Changing a columns datatype</h2>
+```bash
+sql_book=# ALTER TABLE all_users
+sql_book-# ALTER COLUMN full_name TYPE VARCHAR(25);
+ALTER TABLE
+```
+
+<h2>Adding a Constraint</h2>
+* Form for adding a column constraint is:
+`ALTER TABLE table_name ALTER COLUMN column_name SET CONSTRAINT CLAUSE`
+* Form for adding a table constraint is:
+`ALTER TABLE table_name ADD CONSTRAINT constraint_name CONSTRAINT CLAUSE`
+
+<h2>Removing a Constraint</h2>
+* Form for removing a column constraint is:
+`ALTER TABLE table_name ALTER COLUMN column_name DROP CONSTRIANT`
+* Form for removing a table constraint is:
+`ALTER TABLE table_name DROP CONSTRAINT constraint_name`
+
+<h2>Adding a column</h2>
+* Example of adding a column:
+```bash
+ALTER TABLE all_users
+  ADD COLUMN last_login timestamp NOT NULL DEFAULT NOW();
+```
