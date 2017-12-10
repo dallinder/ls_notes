@@ -771,3 +771,151 @@ WHERE (expression);
 ```
 
 * A column with a `NOT NULL` constraint will throw an error.
+
+<h1>Table Relationships</h1>
+
+<h2>Normalization</h2>
+
+* The process of splitting up data across different tables and creating relationships between them to remove duplication and improve data integrity is known as normalization.
+
+* Two important things to remember about normalization for now:
+
+1. The reason for normalization is to reduce data redundancy and improve data integrity.
+
+2. The mechanism for carrying out normalization is arranging data in multiple tables and defining relationships between them.
+
+<h2>Database design</h2>
+
+* Database design involves defining entities to represent different sorts of data and designing relationships between those entities.
+
+<h3>Entities</h3>
+
+* An entity represents a real world object, or set of data that we want to model within our data base. We often identify major nouns of the system we're modeling.
+
+<h3>Relationships</h3>
+
+* Entity Relationship Diagram (ERD) - graphical representation of entities and their relationships to each other.
+
+<h3>Keys</h3>
+
+* Keys are special type of constraint used to establish relationships and uniqueness.
+
+* They can be used to identify a specific row in the current table or refer to a specific row in another table.
+
+<h4>Primary Keys</h4>
+
+* Unique identifier for a row of data.
+
+* To act as a unique identifier, a column must contain some data and that data should be unique to each row.
+
+* Making a column a `PRIMARY KEY` is essentially equivalent to adding `NOT NULL` or `UNIQUE` constraints to that column.
+
+```sql
+ALTER TABLE users ADD PRIMARY KEY (id);
+```
+
+* Although any column in a table can have `UNIQUE` and `NOT NULL` constraints applied to them, each table can only have one Primary Key.
+
+* Popular convention to use `id` column as a primary key.
+
+<h4>Foreign Keys</h4>
+
+* Allows us to associate a row in one table to a row in another table. This is done by setting a column in one table as a Foreign Key and having that column reference another table's Primary Key column.
+
+* `REFERENCES` keyword.
+
+```sql
+FOREIGN KEY (fk_col_name) REFERENCES target_table_name (pk_col_name)
+```
+
+* A reference creating a connection between rows in different tables.
+
+* Referential integrity is the assurance that a column value within a record must reference an existing value; if it doesn't then an error is thrown.
+
+<h2>One to One</h2>
+
+* A one-to-one relationship between two entities exists when a particular entity instance exists in one table, and it can only have one associated entity instance in another table.
+
+* Example: A user can only have one address, and an address belongs to only one user.
+
+* the `id` that is the `PRIMARY KEY` of the `users` table is used as both the `FOREIGN KEY` and `PRIMARY KEY` of the `addresses` table.
+
+```sql
+/*
+one to one: User has one address
+*/
+
+CREATE TABLE addresses (
+  user_id int, -- Both a primary and foreign key
+  street varchar(30) NOT NULL,
+  city varchar(30) NOT NULL,
+  state varchar(30) NOT NULL,
+  PRIMARY KEY (user_id),
+  FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+);
+```
+
+* The above SQL statement creates a new `addresses` table, and creates a relationship between it and the `users` table.
+
+```sql
+INSERT INTO addresses (user_id, street, city, state) VALUES
+  (1, '1 Market Street', 'San Fransisco', 'CA'),
+  (2, '2 Elm Street', 'San Fransisco', 'CA'),
+  (3, '3 Main Street', 'Boston', 'MA');
+```
+
+* `user_id` column uses values that exist in the `id` column of the `users` table in order to connect the tables through the foreign key constraint.
+
+<h3>ON DELETE clause</h3>
+* Adding `ON DELETE` and setting it to `CASCADE` means that if the row being referenced is deleted, the row referencing it is also deleted.
+
+<h2>On to Many</h2>
+
+* Example: A book has many reviews. A review only belongs to one book.
+
+```sql
+
+  published_date timestamp NOT NULL,
+  isbn char(12),
+  PRIMARY KEY (id),
+  UNIQUE (isbn)
+);
+
+/*
+ one to many: Book has many reviews
+*/
+
+CREATE TABLE reviews (
+  id serial,
+  book_id integer NOT NULL,
+  reviewer_name varchar(255),
+  content varchar(255),
+  rating integer,
+  published_date timestamp DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+);
+```
+
+* Key difference on the `reviews` table:
+
+* Unlike the `addresses` table, the `PRIMARY KEY` and `FOREIGN KEY` reference different columns, `id` and `book_id`. This means that the `FORIEGN KEY` column, `book_id` is not bound by the `UNIQUE` constraint of our `PRIMARY KEY` and so the same value from `id` column of the books table can appear in this column more than once. In other words, a book can have many reviews.
+
+<h2>Many to Many</h2>
+
+* Example: A user can check out many books. A book can be checked out by many users (over time).
+
+* Use two foreign keys and one primary key.
+
+```sql
+CREATE TABLE checkouts (
+  id serial,
+  user_id int NOT NULL,
+  book_id int NOT NULL,
+  checkout_date timestamp,
+  return_date timestamp,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+);
+```
