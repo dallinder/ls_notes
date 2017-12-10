@@ -874,7 +874,10 @@ INSERT INTO addresses (user_id, street, city, state) VALUES
 * Example: A book has many reviews. A review only belongs to one book.
 
 ```sql
-
+CREATE TABLE books (
+  id serial,
+  title varchar(100) NOT NULL,
+  author varchar(100) NOT NULL,
   published_date timestamp NOT NULL,
   isbn char(12),
   PRIMARY KEY (id),
