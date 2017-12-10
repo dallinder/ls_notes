@@ -694,3 +694,80 @@ sql_book=# SELECT enabled, count(id) FROM users GROUP BY enabled;
 ```
 
 * If you include columns in the column list alongside the function then those columns must also be include in a `GROUP BY` clause.  
+
+<h1>Update data in a table</h1>
+
+<h2>Updating Data</h2>
+
+* `UPDATE` statement can be written with the following syntax:
+
+```bash
+UPDATE table_name SET [column_name1 = value1, ...]
+WHERE (expression);
+```
+
+* `WHERE` clause in the example is optional. If omitted PostgreSQL will update every row in the target table.
+
+* You can test your `WHERE` clause in a `SELECT` statement to check you which rows are being targeted, before using it in an `UPDATE` statement.
+
+<h3>Update all rows</h3>
+
+```bash
+sql_book=# UPDATE users SET enabled = false;
+UPDATE 5
+```
+
+* Ave sets all users to false in the enabled column
+
+* `UPDATE 5` means we have updated 5 rows. This includes the row where `enabled` already had a value of false.
+
+<h3>Update specific rows</h3>
+
+* Using a `WHERE` clause lets us update only the specific rows that meet the condition(s) set in the clause.
+
+```bash
+sql_book=# UPDATE users SET enabled = true
+sql_book-# WHERE full_name = 'Harry Potter' OR full_name = 'Jane Smith';
+UPDATE 4
+```
+
+<h2>Deleting data</h2>
+
+* `DELETE` statement is used to remove entire rows from a database table.
+
+```sql
+DELETE FROM table_name WHERE (expression);
+```
+
+<h3>Delete specific rows</h3>
+
+```bash
+sql_book=# DELETE FROM users
+sql_book-# WHERE full_name='Harry Potter' AND id > 3;
+DELETE 1
+```
+
+* `DELETE 1` tells us how many rows were deleted.
+
+<h3>Delete all rows</h3>
+
+* It's rare to do this. To do it, don't include a `WHERE` clause.
+
+```sql
+DELETE FROM users;
+```
+
+<h2>Update vs Delete</h2>
+
+* `UPDATE` can update one or more columns within one or more rows by using `SET` clause
+
+* `DELETE` can only delete one or more entire rows, and not particular pieces of data from within those rows.
+
+* You can use `NULL` to approximate deleting specific values. `NULL` = unknown value.
+
+```bash
+UPDATE table_name SET column_name1 = NULL
+WHERE (expression);
+```
+
+* A column with a `NOT NULL` constraint will throw an error.
