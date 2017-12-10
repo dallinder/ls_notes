@@ -577,3 +577,120 @@ sql_book=# SELECT * FROM users WHERE full_name LIKE '%Smith';
 * `_` - wildcard for only a single character.
 
 * An alternative for `LIKE` is `SIMILAR TO`, which uses Regex.
+
+<h1>More on Select</h1>
+
+* When working with large datasets, it is common to display only one portion of the data at at time.
+
+* Displaying portions of data as separate 'pages' is a user interface pattern used in many web apps, generally referred to as 'pagination.'
+
+* `LIMIT` and `OFFSET` clauses of `SELECT` are the base on which pagination is built.
+
+* Below shows 1 row at a time.
+
+```bash
+sql_book=# SELECT * FROM users LIMIT 1;
+```
+
+* Below skips a row and then shows 1 row.
+
+```bash
+sql_book=# SELECT * FROM users LIMIT 1 OFFSET 1;
+```
+
+* You can use `LIMIT` to get a preview or taste of what data is available or would be returned rather than returning the entire dataset. Useful during development when forming your queries and getting an understanding of the dataset and data quality.
+
+
+<h2>DISTINCT</h2>
+
+* `DISTINCT` can be used as part of a `SELECT` query to return only distinct, or unique, values.
+
+```bash
+sql_book=# SELECT full_name FROM users;
+ full_name   
+--------------
+ John Smith
+ Jane Smith
+ Harry Potter
+ Harry Potter
+ Jane Smith
+(5 rows)
+```
+
+```bash
+sql_book=# SELECT DISTINCT full_name FROM users;
+ full_name
+--------------
+ John Smith
+ Jane Smith
+ Harry Potter
+(3 rows)
+```
+
+* `DISTINCT` can be useful when used in conjunction with SQL functions.
+
+```bash
+sql_book=# SELECT count(full_name) FROM users;
+ count
+-------
+     5
+(1 row)
+```
+
+```bash
+sql_book=# SELECT count(DISTINCT full_name) FROM users;
+ count
+-------
+     3
+(1 row)
+```
+
+<h2>Functions</h2>
+
+* Functions can be grouped into the 3 most commonly used types:
+1. String
+2. Data/time
+3. Aggregate
+
+<h3>String Functions</h3>
+
+* Perform some operation on values whose data type is a string.
+
+* `length` - `SELECT length(full_name) FROM users;` - This returns the legnth of every users name. You could also use `length` in a `WHERE` clause to filter data based on name length
+
+* `trim` - `SELECT trim(leading ' ' from full_name) FROM users;` - If any of the data in our `full_name` column had sopace in front of the name, using the `trim` function like this would remove the leading space.
+
+<h3>Data/Time Functions</h3>
+
+* `data_part` - `SELECT full_name, date_part('year', last_login) FROM users;` - allows us to view a table that only contains part of a user's timestamp.
+
+* `age` - `SELECT full_name, age(last_login) FROM users` - `age` function, when passed a single `timestamp` as an argument, calculates the time elapsed between that timestamp and the current time.
+
+<h3>Aggregrate Functions</h3>
+
+* Aggregrate functions compute a single result from a set of input values.
+
+`count` - Returns the number of values in the column passed in as an argument
+
+`sum` - Not to be confused with count. Sums numeric type values for all rows being selected to return total.
+
+`min` - This returns the lowest value in a column for all selected rows.
+
+`max` - This returns the highest value in a column for all selected rows.
+
+`avg` - This returns the average(arithmetic mean) of numeric type values for all the rows being selected.
+
+* Aggregate functions really start to be useful when grouping table rows together.
+
+<h3>GROUP BY</h3>
+
+```bash
+sql_book=# SELECT enabled, count(id) FROM users GROUP BY enabled;
+ enabled | count
+---------+-------
+ f       |     1
+ t       |     4
+(2 rows)
+```
+
+* If you include columns in the column list alongside the function then those columns must also be include in a `GROUP BY` clause.  
