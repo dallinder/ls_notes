@@ -922,3 +922,180 @@ CREATE TABLE checkouts (
   FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 ```
+
+<h1>SQL Joins</h1>
+
+* JOINs are clauses in SQL statements that link two tables together, usually based on keys that defined the relationship between those two tables.
+
+* Several types of JOINs: INNER, LEFT OUTER, RIGHT OUTER, FULL OUTER, and CROSS.
+
+<h2>Join Syntax</h2>
+
+```sql
+SELECT [table_name.column_name1, table_name.column_name2,..] FROM table_name1
+join_type JOIN table_name2 ON (join_condition);
+```
+
+* To join one table to another, PostgreSQL needs to know several pieces of information:
+
+1. The name of the first table to join.
+2. The type of join to use.
+3. The name of the second table to join.
+4. The join condition.
+
+* The pieces are combined together using the `JOIN` and `ON` keywords.
+
+* The part that comes after the `ON` keyword is the join condition.
+
+* In most cases the join condition is created using the primary key of one table and the foreign key of the table we want to join it with.
+
+* Creates a virtual table known as a join table.
+
+<h2>Types of Joins</h2>
+
+<h3>INNER JOIN</h3>
+
+* Returns a result set that contains the common elements of the tables, i.e. the intersection where they match on the joined condition.
+
+* Most commonly used JOIN type. PostgreSQL assumes INNER JOIN if you use the `JOIN` keyword.
+
+```sql
+SELECT users.*, addresses.*
+FROM users
+INNER JOIN addresses
+ON (users.id = addresses.user_id);
+```
+
+<h3>LEFT JOIN</h3>
+
+* Takes all the rows from one table, defined as the `LEFT` table, and joins it with a second table. The `JOIN` is based on the conditions supplied in the parentheses. A `LEFT JOIN` will always include the rows from the `LEFT` table, even if there are no matching rows in the table it is JOINed with.
+
+```sql
+sql_book=# SELECT users.*, addresses.*
+sql_book-# FROM users
+sql_book-# LEFT JOIN addresses
+sql_book-# ON (users.id = addresses.user_id);
+ id |  full_name   | enabled |         last_login         | user_id |     street      |     city      | state
+----+--------------+---------+----------------------------+---------+-----------------+---------------+-------
+  1 | John Smith   | f       | 2017-12-09 12:58:57.50925  |       1 | 1 Market Street | San Francisco | CA
+  2 | Alice Walker | t       | 2017-12-09 13:02:49.055887 |       2 | 2 Elm Street    | Santa Fe      | NM
+  3 | Harry Potter | t       | 2017-12-09 13:02:49.055887 |       3 | 3 Main Street   | Boston        | MA
+  5 | Jane Smith   | t       | 2017-12-10 06:58:11.035029 |         |                 |               |
+(4 rows)
+
+```
+
+<h3>RIGHT JOIN</h3>
+
+* `RIGHT JOIN` is similar to a `LEFT JOIN`, execpt the roles are reversed.
+
+```sql
+SELECT reviews.book_id, reviews.content,
+       reviews.rating, reviews.published_date,
+       books.id, books.title, books.author
+FROM reviews RIGHT JOIN books ON (reviews.book_id = books.id);
+
+book_id |     content      | rating |       published_date       | id |       title        |   author    
+---------+------------------+--------+----------------------------+----+--------------------+-------------
+      1 | My first review  |      4 | 2017-12-10 05:50:11.127281 |  1 | My First SQL Book  | Mary Parker
+      2 | Another review   |      1 | 2017-10-22 23:47:10.407569 |  2 | My Second SQL Book | John Mayer
+      2 | My second review |      5 | 2017-10-13 15:05:12.673382 |  2 | My Second SQL Book | John Mayer
+        |                  |        |                            |  3 | My Third SQL Book  | Cary Flint
+(4 rows)
+
+```
+
+<h3>FULL JOIN</h3>
+
+* Essentially a combination of `LEFT JOIN` and `RIGHT JOIN`
+
+* Contains all the rows from both of the tables.
+
+<h3>CROSS JOIN</h3>
+
+* Returns all rows from one table crossed with every row from the second table.
+
+* Since it returns all combinations, a `CROSS JOIN` does not need to match rows using a join condition, therefore it does not have an `ON` clause.
+
+```sql
+sql_book=# SELECT * FROM users CROSS JOIN addresses;
+ id |  full_name   | enabled |         last_login         | user_id |     street      |     city      | state
+----+--------------+---------+----------------------------+---------+-----------------+---------------+-------
+  1 | John Smith   | f       | 2017-12-09 12:58:57.50925  |       1 | 1 Market Street | San Francisco | CA
+  3 | Harry Potter | t       | 2017-12-09 13:02:49.055887 |       1 | 1 Market Street | San Francisco | CA
+  5 | Jane Smith   | t       | 2017-12-10 06:58:11.035029 |       1 | 1 Market Street | San Francisco | CA
+  2 | Alice Walker | t       | 2017-12-09 13:02:49.055887 |       1 | 1 Market Street | San Francisco | CA
+  1 | John Smith   | f       | 2017-12-09 12:58:57.50925  |       2 | 2 Elm Street    | Santa Fe      | NM
+  3 | Harry Potter | t       | 2017-12-09 13:02:49.055887 |       2 | 2 Elm Street    | Santa Fe      | NM
+  5 | Jane Smith   | t       | 2017-12-10 06:58:11.035029 |       2 | 2 Elm Street    | Santa Fe      | NM
+  2 | Alice Walker | t       | 2017-12-09 13:02:49.055887 |       2 | 2 Elm Street    | Santa Fe      | NM
+  1 | John Smith   | f       | 2017-12-09 12:58:57.50925  |       3 | 3 Main Street   | Boston        | MA
+  3 | Harry Potter | t       | 2017-12-09 13:02:49.055887 |       3 | 3 Main Street   | Boston        | MA
+  5 | Jane Smith   | t       | 2017-12-10 06:58:11.035029 |       3 | 3 Main Street   | Boston        | MA
+  2 | Alice Walker | t       | 2017-12-09 13:02:49.055887 |       3 | 3 Main Street   | Boston        | MA
+(12 rows)
+```
+
+* Unlikely that you would use a `CROSS JOIN`.
+
+<h3>Multiple Joins</h3>
+
+* It is possible and common to join more than just 2 tables together. This is done by adding additional `JOIN` clauses to your `SELECT` statement.
+
+* Example joining `users`, `checkouts`, and `books` tables.
+
+```sql
+SELECT users.full_name, books.title, checkouts.checkout_date
+FROM users
+INNER JOIN checkouts ON (users.id = checkouts.user_id)
+INNER JOIN books AS b ON (books.id = checkouts.book_id);
+```
+
+<h2>Aliasing</h2>
+
+* Sometimes queries get too long and you can use aliasing to shorten them.
+
+```sql
+SELECT u.full_name, b.title, c.checkout_date
+FROM users AS u
+INNER JOIN checkouts AS c ON (u.id = c.user_id)
+INNER JOIN books AS b ON (b.id = c.book_id);
+```
+
+* You can shorten even more by leaving out `AS` keyword. `FROM users u`
+
+<h3>Column Aliasing</h3>
+
+* Can also use aliasing to display more meaningful information in our result table.
+
+```sql
+sql_book=# SELECT count(id) AS "Number of Books Checked Out"
+sql_book-# FROM checkouts;
+Number of Books Checked Out
+-----------------------------
+                          4
+(1 row)
+```
+
+vs
+
+```sql
+sql_book=# SELECT count(id) FROM checkouts;
+ count
+-------
+     4
+(1 row
+```
+
+<h2>Subqueries</h2>
+
+* Example: executing a `SELECT` query, and the using the results that query as a condition in another `SELECT` query.
+
+```sql
+sql_book=# SELECT u.full_name FROM users u
+          WHERE u.id NOT IN (SELECT c.user_id FROM checkouts c);
+  full_name
+-------------
+ Harry Potter
+(1 row)
+```
