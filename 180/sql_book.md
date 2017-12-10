@@ -337,3 +337,103 @@ Did not find any relation named "all_users".
 
 <h2>Summary</h2>
 Table that has all statements from this chapter: https://launchschool.com/books/sql/read/alter_table#summary
+
+<h1>Inserting Data into a Table</h1>
+* DML is a sub-langauge of SQL which incorporates the various key words, clauses, and syntax used to write Data Manipulation Statements.
+* Data Manipulation Statements are used for accessing and manipulating data in the database. They can categorized into 4 different types.
+
+1. `INSERT` statements - These add new data into a database table.
+2. `SELECT` statements - Also referred to as Queries; retrieve existing data from database tables.
+3. `UPDATE` statements - Update existing data in a database table.
+4. `DELETE` statements - Delete existing data from a database table.
+
+* The actions performed by these 4 types of statement are sometimes also referred to as CRUD operations.
+
+* `CRUD` - CREATE, READ, UPDATE, and DELETE.
+
+<h2>Insertion Statement Syntax</h2>
+* General form of an `Insert` statement
+
+```bash
+INSERT INTO table_name (column1_name, column2_name, ...)
+  VALUES (data_for_column1, data_for_column2, ...);
+```
+
+* When using an `INSERT`, we have to provide 3 key pieces of info.
+1. The table name we wish to store the data in.
+2. The names of the columns we're adding data to.
+3. The values we wish to store in the columns listed directly after the table name.
+
+* When inserting data into a table, you may specify all the columns from the table, just a few, or none. Generally best to specify which columns you want to insert data into.
+
+* For each column you must specify a value for it in the `VALUES` clause, otherwise you'll get an error back.
+
+<h2>Adding Rows of Data</h2>
+
+<h3>Rows</h3>
+
+* Columns give structure to a table, rows ('tuples') actually contain the data.
+
+* Each row in a table is an individual entity and has a corresponding value for each column in the table.
+
+<h3>Adding a Single Row</h3>
+
+* Specify the columns into our `INSERT` statement.
+
+```bash
+sql_book=# INSERT INTO users (full_name, enabled)
+sql_book-# VALUES ('John Smith', false);
+```
+
+* Order of the columns must match the order of the values to be inserted, but by specifying both columns and values, it is much easier to ensure that the order matches up correctly.
+
+```bash
+INSERT 0 1
+```
+
+* The first number is the `oid`, the 2nd is `count` of rows that were inserted.
+
+<h3>Adding Multiple Rows</h3>
+
+Example adding mulitple rows:
+
+```bash
+sql_book=# INSERT INTO users (full_name)
+sql_book-# VALUES ('Jane Smith'), ('Harry Potter');
+INSERT 0 2
+```
+
+* When we add multiple rows, PostgreSQL adds them in the order that we specified. So 'Jane Smith' id = 2, and 'Harry Potter' id = 3.
+
+<h2>Constraints and Adding Data</h2>
+
+<h3>Default Values</h3>
+* Setting a `DEFAULT` value for a column ensure that if a value is not specified for that column in an `INSERT` statement, the nthe default value will be used.
+
+<h3>NOT NULL Constraints</h3>
+
+* Doesn't always makes sense for a column to have a default value. `NOT NULL` constraints can be used to ensure that when a new row is added, a value mus be specified.
+
+<h3>Unique Constraints</h3>
+
+* Sometimes we want to make sure that a value added for that column s unique.
+
+* We can use `UNIQUE`
+
+* `ALTER TABLE table_name ADD UNIQUE (column_name);`
+
+* Having some sort of 'id' column in a database is common, and useful practice. Such a column is generally required to store a unique id for each row.
+
+<h3>CHECK Constraints</h3>
+
+* `CHECK` constraints limit the type of data that can be included in a column based on some condition we set in the constraint.
+
+* `ALTER TABLE table_name ADD CHECK (expression);`
+
+* Each time a new record is in the process of being added to a table, that constraint is first checked to ensure hat data being added conforms to it.
+
+* `<>` is a not equal operator
+
+* A string in PostgreSQL is a sequence of characters bounded by single quotes.
+
+* For `'O'Leary'` to work it would have to be `O''Leary'`
