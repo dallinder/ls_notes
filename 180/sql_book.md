@@ -45,14 +45,14 @@
 <h3>SQL Stataements</h3>
 <p>SQL statements are commands issued to the database using SQL syntax.</p>
 
-```bash
+```sql
 postgres=# SELECT name FROM people WHERE id = 1;
 ```
 
 <p>SQL statements always terminate in a semi-colon.</p>
 <p>Another way to write the above example:</p>
 
-```bash
+```sql
 postgres=# SELECT name
 FROM people
 WHERE id = 1;
@@ -68,7 +68,7 @@ WHERE id = 1;
 
 <h1>SQL Basics</h1>
 
-```bash
+```sql
 ls_burger=# SELECT * FROM orders;
 ```
 
@@ -83,7 +83,7 @@ ls_burger=# SELECT * FROM orders;
 
 You can select multiple columns by comma-seperating the column names:
 
-```bash
+```sql
 ls_burger=# SELECT drink, side FROM orders;
 ```
 
@@ -91,7 +91,7 @@ ls_burger=# SELECT drink, side FROM orders;
 
 Database tables often use a column such as an `id` column as a means if uniquely identifying a particular row of data. You can add where constraint with `id`, to return the data from all the columns for a row.
 
-```bash
+```sql
 ls_burger=# SELECT * FROM orders WHERE id = 1;
 ```
 
@@ -101,7 +101,7 @@ ls_burger=# SELECT * FROM orders WHERE id = 1;
 
 You can combine syntax for specifying columns and rows.
 
-```bash
+```sql
 ls_burger=# SELECT customer_name FROM orders WHERE side = 'Fries';
 ```
 
@@ -119,7 +119,7 @@ Steps to create a new database:
   * this opens the psql console and connects to the database specificed by the `d` option
 3. If you see this, everything is working correctly:
 
-```bash
+```sql
 psql (9.5.3)
 Type "help" for help.
 
@@ -130,7 +130,7 @@ sql_book=#
 
 * Can create database from psql console using the SQL statement `CREATE DATABASE`
 
-```bash
+```sql
 sql_book=# CREATE DATABASE another_database;
 CREATE DATABASE
 sql_book=#
@@ -151,7 +151,7 @@ sql_book=#
 <h2>Connecting to a database</h2>
 * When in the psql console, you can connect to a different database using `\c` or `\connect` meta-commands (both do the same thing).
 
-```bash
+```sql
 sql_book=# \c another_database
 You are now connected to database "another_database" as user "User".
 another_database=#
@@ -170,7 +170,7 @@ another_database=#
 
  * Use SQL command `DROP DATABASE`
 
-```bash
+```sql
 yet_another_database=# DROP DATABASE another_database;
 DROP DATABASE
 yet_another_database=#
@@ -178,7 +178,7 @@ yet_another_database=#
 
 * Use `dropdb`
 
-```bash
+```sql
 $ dropdb yet_another_database
 ```
 
@@ -187,14 +187,14 @@ $ dropdb yet_another_database
 <h1>Create and View Tables</h1>
 <h2>Table Creation Syntax</h2>
 `CREATE TABLE` SQL statement to create a table
-```bash
+```sql
 CREATE TABLE some_table();
 ```
 
 * inside the parenthesis is where you put column information
 * each column is written on a separate line, separated by comma.
 
-```bash
+```sql
 CREATE TABLE table_name (
   column_1_name column_1_data_type [constraints, ...]
   column_2_name column_2_data_type [constraints, ...]
@@ -209,7 +209,7 @@ CREATE TABLE table_name (
 * constraints can be defined either at the column level or the table level.
 <h2>Creating a `users` table</h2>
 SQL statement to create a table, named users, using `CREATE TABLE` statement.
-```bash
+```sql
 sql_book=# CREATE TABLE users (
   id serial UNIQUE NOT NULL,
   username CHAR(25),
@@ -262,7 +262,7 @@ sql_book=# CREATE TABLE users (
 
 <h2>Renaming a table</h2>
 * Tables can be renamed using the `RENAME` clause.
-```bash
+```sql
 sql_book=# ALTER TABLE users
 sql_book-# RENAME TO all_users;
 ALTER TABLE
@@ -271,7 +271,7 @@ ALTER TABLE
 <h2>Renaming a column</h2>
 * You can use `RENAME` clause to rename a specific column within the table.
 
-```bash
+```sql
 sql_book=# ALTER TABLE all_users
 sql_book-# RENAME COLUMN username TO full_name;
 ALTER TABLE
@@ -279,7 +279,7 @@ ALTER TABLE
 
 <h2>Changing a columns datatype</h2>
 
-```bash
+```sql
 sql_book=# ALTER TABLE all_users
 sql_book-# ALTER COLUMN full_name TYPE VARCHAR(25);
 ALTER TABLE
@@ -306,7 +306,7 @@ ALTER TABLE
 <h2>Adding a column</h2>
 * Example of adding a column:
 
-```bash
+```sql
 ALTER TABLE all_users
   ADD COLUMN last_login timestamp NOT NULL DEFAULT NOW();
 ```
@@ -318,7 +318,7 @@ ALTER TABLE all_users
 <h2>Removing a column</h2>
 * Example of removing a column:
 
-```bash
+```sql
 sql_book=# ALTER TABLE all_users DROP COLUMN enabled;
 ALTER TABLE
 ```
@@ -326,7 +326,7 @@ ALTER TABLE
 <h2>Dropping Tables</h2>
 * Example of deleting a table:
 
-```bash
+```sql
 sql_book=# DROP TABLE all_users;
 DROP TABLE
 sql_book=# \d all_users
@@ -354,7 +354,7 @@ Table that has all statements from this chapter: https://launchschool.com/books/
 <h2>Insertion Statement Syntax</h2>
 * General form of an `Insert` statement
 
-```bash
+```sql
 INSERT INTO table_name (column1_name, column2_name, ...)
   VALUES (data_for_column1, data_for_column2, ...);
 ```
@@ -380,14 +380,14 @@ INSERT INTO table_name (column1_name, column2_name, ...)
 
 * Specify the columns into our `INSERT` statement.
 
-```bash
+```sql
 sql_book=# INSERT INTO users (full_name, enabled)
 sql_book-# VALUES ('John Smith', false);
 ```
 
 * Order of the columns must match the order of the values to be inserted, but by specifying both columns and values, it is much easier to ensure that the order matches up correctly.
 
-```bash
+```sql
 INSERT 0 1
 ```
 
@@ -397,7 +397,7 @@ INSERT 0 1
 
 Example adding mulitple rows:
 
-```bash
+```sql
 sql_book=# INSERT INTO users (full_name)
 sql_book-# VALUES ('Jane Smith'), ('Harry Potter');
 INSERT 0 2
@@ -444,12 +444,12 @@ INSERT 0 2
 
 <h2>Select Query Syntax</h2>
 
-```bash
+```sql
 SELECT [*, (column_name1, column_name2, ...)]
 FROM table_name WHERE (condition);
 ```
 
-```bash
+```sql
 sql_book=# SELECT enabled, full_name FROM users
 sql_book-# WHERE id < 2;
  enabled | full_name  
@@ -472,13 +472,13 @@ sql_book-# WHERE id < 2;
 
 * Displays the results of a query in a particular sort order.
 
-```bash
+```sql
 SELECT [*, (column_name1, column_name2, ...)]
 FROM table_name WHERE (condition)
 ORDER BY column_name;
 ```
 
-```bash
+```sql
 sql_book=# SELECT full_name, enabled FROM users
 sql_book-# ORDER BY enabled;
 
@@ -496,7 +496,7 @@ sql_book-# ORDER BY enabled;
 
 * You can specify the sort direction, ascending (ASC) or decending (DESC). If omitted, then the default is `ASC`.
 
-```bash
+```sql
 sql_book=# SELECT full_name, enabled FROM users
 sql_book-# ORDER BY enabled DESC;
 
@@ -510,7 +510,7 @@ sql_book-# ORDER BY enabled DESC;
 
 * You can fine tune even further by having comma-seperated expressions in the `ORDER BY` clause.
 
-```bash
+```sql
 sql_book=# SELECT full_name, enabled FROM users
 sql_book-# ORDER BY enabled DESC, id DESC;
 
@@ -543,7 +543,7 @@ sql_book-# ORDER BY enabled DESC, id DESC;
 * `NULL` is a special value in SQL that represents an unknown value.
 * When identifying `NULL` values we must instead use the `IS NULL` comparison predicate.
 
-```bash
+```sql
 SELECT * FROM my_table WHERE my_column IS NULL;
 ```
 
@@ -555,7 +555,7 @@ SELECT * FROM my_table WHERE my_column IS NULL;
 
 * `NOT` is less commonly used. `AND` and `OR` operators allow you to combine multiple conditions in a single expression.
 
-```bash
+```sql
 sql_book=# SELECT * FROM users WHERE full_name = 'Harry Potter' OR enabled = 'false';
  id |  full_name   | enabled |         last_login         
 ----+--------------+---------+----------------------------
@@ -569,7 +569,7 @@ sql_book=# SELECT * FROM users WHERE full_name = 'Harry Potter' OR enabled = 'fa
 
 * most often carried out with a `LIKE` operator
 
-```bash
+```sql
 sql_book=# SELECT * FROM users WHERE full_name LIKE '%Smith';
 ```
 
@@ -588,13 +588,13 @@ sql_book=# SELECT * FROM users WHERE full_name LIKE '%Smith';
 
 * Below shows 1 row at a time.
 
-```bash
+```sql
 sql_book=# SELECT * FROM users LIMIT 1;
 ```
 
 * Below skips a row and then shows 1 row.
 
-```bash
+```sql
 sql_book=# SELECT * FROM users LIMIT 1 OFFSET 1;
 ```
 
@@ -605,7 +605,7 @@ sql_book=# SELECT * FROM users LIMIT 1 OFFSET 1;
 
 * `DISTINCT` can be used as part of a `SELECT` query to return only distinct, or unique, values.
 
-```bash
+```sql
 sql_book=# SELECT full_name FROM users;
  full_name   
 --------------
@@ -617,7 +617,7 @@ sql_book=# SELECT full_name FROM users;
 (5 rows)
 ```
 
-```bash
+```sql
 sql_book=# SELECT DISTINCT full_name FROM users;
  full_name
 --------------
@@ -629,7 +629,7 @@ sql_book=# SELECT DISTINCT full_name FROM users;
 
 * `DISTINCT` can be useful when used in conjunction with SQL functions.
 
-```bash
+```sql
 sql_book=# SELECT count(full_name) FROM users;
  count
 -------
@@ -637,7 +637,7 @@ sql_book=# SELECT count(full_name) FROM users;
 (1 row)
 ```
 
-```bash
+```sql
 sql_book=# SELECT count(DISTINCT full_name) FROM users;
  count
 -------
@@ -684,7 +684,7 @@ sql_book=# SELECT count(DISTINCT full_name) FROM users;
 
 <h3>GROUP BY</h3>
 
-```bash
+```sql
 sql_book=# SELECT enabled, count(id) FROM users GROUP BY enabled;
  enabled | count
 ---------+-------
@@ -701,7 +701,7 @@ sql_book=# SELECT enabled, count(id) FROM users GROUP BY enabled;
 
 * `UPDATE` statement can be written with the following syntax:
 
-```bash
+```sql
 UPDATE table_name SET [column_name1 = value1, ...]
 WHERE (expression);
 ```
@@ -712,7 +712,7 @@ WHERE (expression);
 
 <h3>Update all rows</h3>
 
-```bash
+```sql
 sql_book=# UPDATE users SET enabled = false;
 UPDATE 5
 ```
@@ -725,7 +725,7 @@ UPDATE 5
 
 * Using a `WHERE` clause lets us update only the specific rows that meet the condition(s) set in the clause.
 
-```bash
+```sql
 sql_book=# UPDATE users SET enabled = true
 sql_book-# WHERE full_name = 'Harry Potter' OR full_name = 'Jane Smith';
 UPDATE 4
@@ -741,7 +741,7 @@ DELETE FROM table_name WHERE (expression);
 
 <h3>Delete specific rows</h3>
 
-```bash
+```sql
 sql_book=# DELETE FROM users
 sql_book-# WHERE full_name='Harry Potter' AND id > 3;
 DELETE 1
@@ -765,7 +765,7 @@ DELETE FROM users;
 
 * You can use `NULL` to approximate deleting specific values. `NULL` = unknown value.
 
-```bash
+```sql
 UPDATE table_name SET column_name1 = NULL
 WHERE (expression);
 ```
