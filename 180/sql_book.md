@@ -1099,3 +1099,9 @@ sql_book=# SELECT u.full_name FROM users u
  Harry Potter
 (1 row)
 ```
+
+* `NOT IN` compares the current user id to all the rows in the result of the the subquery.
+
+<h2>Subqueries vs Joins</h2>
+
+* A differentiator between them may be their performance. As a general rule, JOINs are faster to run than subqueries.
