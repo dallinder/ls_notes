@@ -437,3 +437,143 @@ INSERT 0 2
 * A string in PostgreSQL is a sequence of characters bounded by single quotes.
 
 * For `'O'Leary'` to work it would have to be `O''Leary'`
+
+<h1>Select Queries</h1>
+
+* Querying data using `SELECT` forms the Read part of our CRUD operations.
+
+<h2>Select Query Syntax</h2>
+
+```bash
+SELECT [*, (column_name1, column_name2, ...)]
+FROM table_name WHERE (condition);
+```
+
+```bash
+sql_book=# SELECT enabled, full_name FROM users
+sql_book-# WHERE id < 2;
+ enabled | full_name  
+---------+------------
+ f       | John Smith
+(1 row)
+```
+
+* The order of the columns in the response is the order that the column names are specified in the query.
+
+* we used the `id` column in the `WHERE` condition so it is used to filter our table, but we didn't specif id in the colmun list so the values in the column are not included in the results.
+
+* We are told `1 row` is returned. This is the number of rows in the table that match the `WHERE` condition.
+
+* `<` is a less than operator.
+
+* It's better to try an avoid naming columns the same as keywords because it will cause an error. If you can't avoid it, use double quotes around the identifier.
+
+<h2>ORDER BY</h2>
+
+* Displays the results of a query in a particular sort order.
+
+```bash
+SELECT [*, (column_name1, column_name2, ...)]
+FROM table_name WHERE (condition)
+ORDER BY column_name;
+```
+
+```bash
+sql_book=# SELECT full_name, enabled FROM users
+sql_book-# ORDER BY enabled;
+
+  full_name   | enabled
+--------------+---------
+ John Smith   |  f
+ Jane Smith   |  t
+ Harry Potter |  t
+(3 rows)
+```
+
+* When ordering by booleans, `false` comes before `true` in ascending order.
+
+* Since two of the rows have the same 'enabled' value, the sort order between those two rows is arbitrary.
+
+* You can specify the sort direction, ascending (ASC) or decending (DESC). If omitted, then the default is `ASC`.
+
+```bash
+sql_book=# SELECT full_name, enabled FROM users
+sql_book-# ORDER BY enabled DESC;
+
+  full_name   | enabled
+--------------+---------
+ Jane Smith   |  t
+ Harry Potter |  t
+ John Smith   |  f
+(3 rows)
+```
+
+* You can fine tune even further by having comma-seperated expressions in the `ORDER BY` clause.
+
+```bash
+sql_book=# SELECT full_name, enabled FROM users
+sql_book-# ORDER BY enabled DESC, id DESC;
+
+  full_name   | enabled
+--------------+---------
+ Harry Potter |  t
+ Jane Smith   |  t
+ John Smith   |  f
+(3 rows)
+```
+
+* The above first sorts by enabled, then by id's.
+
+<h2>Operators</h2>
+<h3>Comparison Operators</h3>
+
+| Operator     | Description              |
+| :------------| :----------------------- |
+| `<`          | less than                |
+| `>`          | greater than             |
+| '<='         | less than or equal to    |
+| '>='         | greater than or equal to |
+| '='          | equal                    |
+| '<>' or `!=` | not equal                |
+
+* Comparison predicates behave much like operators but have a special syntax.
+
+* Examples: `BETWEEN`, `NOT BETWEEN`, `IS DISTINCT FROM`, `IS NOT DISTINCT FROM`, `IS NULL`, `IS NOT NULL`
+
+* `NULL` is a special value in SQL that represents an unknown value.
+* When identifying `NULL` values we must instead use the `IS NULL` comparison predicate.
+
+```bash
+SELECT * FROM my_table WHERE my_column IS NULL;
+```
+
+<h3>Logical Operators</h3>
+* There are 3 logical operators:
+1. `AND`
+2. `OR`
+3. `NOT`
+
+* `NOT` is less commonly used. `AND` and `OR` operators allow you to combine multiple conditions in a single expression.
+
+```bash
+sql_book=# SELECT * FROM users WHERE full_name = 'Harry Potter' OR enabled = 'false';
+ id |  full_name   | enabled |         last_login         
+----+--------------+---------+----------------------------
+  1 | John Smith   | f       | 2017-12-09 12:58:57.50925
+  3 | Harry Potter | t       | 2017-12-09 13:02:49.055887
+(2 rows)
+```
+
+<h3>String matching Operators</h3>
+* String or pattern matching allows you to add flexibility to your conditional expressions in another way, by searching for a sub-set of data within a column.
+
+* most often carried out with a `LIKE` operator
+
+```bash
+sql_book=# SELECT * FROM users WHERE full_name LIKE '%Smith';
+```
+
+* `%` - wildcard for any number of characters.
+* `_` - wildcard for only a single character.
+
+* An alternative for `LIKE` is `SIMILAR TO`, which uses Regex.
