@@ -45,6 +45,7 @@
 
 <h1>PostgreSQL Data Types</h1>
 
+<html>
 <tbody>
 <tr>
 <td><code>varchar(length)</code></td>
@@ -103,3 +104,4 @@
 </td>
 </tr>
 </tbody>
+</html>
