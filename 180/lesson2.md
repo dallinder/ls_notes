@@ -176,3 +176,25 @@ CREATE TABLE more_colors (id serial PRIMARY KEY, name text);
 * UUIDs - very large number that are used to identify individual objects or, when working with a database, rows in a database.
 
 * Often represented with hexadecimal strings with dashes.
+
+* SQL statement to make a new sequence: `CREATE SEQUENCE sequence_name`
+
+<h1>How PostgreSQL Executes Queries</h1>
+
+* Basic process for a `SELECT` query.
+
+
+1. Rows are collected into a virtual derived table.
+  * new temp table from all tables listed in `FROM` clause
+2. Rows are filtered using `WHERE` conditions.
+  * All conditionals are evaluated for each row, Those that don't meet the requirement are removed.
+3. Rows are divided into groups.
+  * If query include `GROUP BY` clause, remaining rows are divided into appropriate groups.
+4. Groups are filtered using `HAVING` conditions.
+  * `HAVING` conditions are very similar to `WHERE` conditions except that they are applied to values that are used to create groups and not individual rows.
+  * A column that is mentioned in a `HAVING` clause should almost always appear in a `GROUP BY` clause and/or an aggregate function in the same query.
+  * `HAVING` clause is used to filter aggregated/grouped data.
+5. Compute values to return using select list.
+  * Each element in the select list is evaluated, including any functions, and the resulting values are associated with the name of the column they are from, name of the last function evaluated, unless a different name is specified in the the query with `AS`
+6. Limit results
+  * If `LIMIT` or `OFFSET` clauses are included in the query, these are used to adjust which rows in the result set are returned.
