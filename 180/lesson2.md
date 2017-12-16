@@ -198,3 +198,13 @@ CREATE TABLE more_colors (id serial PRIMARY KEY, name text);
   * Each element in the select list is evaluated, including any functions, and the resulting values are associated with the name of the column they are from, name of the last function evaluated, unless a different name is specified in the the query with `AS`
 6. Limit results
   * If `LIMIT` or `OFFSET` clauses are included in the query, these are used to adjust which rows in the result set are returned.
+
+<h1>Table and Column Aliases</h1>
+
+* Joining multiple tables is a time when might need to using aliasing. Might have multiple columns named the same thing.
+
+* Change name of table within a SQL query. Useful in longer, move involved queries.
+
+* Use `AS` to make an alias.
+
+* Don't want to alias table names unless you have to.
