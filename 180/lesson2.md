@@ -45,61 +45,134 @@
 
 <h1>PostgreSQL Data Types</h1>
 
-<tbody>
-<tr>
-<td><code>varchar(length)</code></td>
-<td>character</td>
-<td>up to <code>length</code> characters of text</td>
-<td><code>canoe</code></td>
-</tr>
-<tr>
-<td><code>text</code></td>
-<td>character</td>
-<td>unlimited length of text</td>
-<td><code>a long string of text</code></td>
-</tr>
-<tr>
-<td><code>integer</code></td>
-<td>numeric</td>
-<td>whole numbers</td>
-<td>
-<code>42</code>, <code>-1423290</code>
-</td>
-</tr>
-<tr>
-<td><code>real</code></td>
-<td>numeric</td>
-<td>floating-point numbers</td>
-<td>
-<code>24.563</code>, <code>-14924.3515</code>
-</td>
-</tr>
-<tr>
-<td><code>decimal(precision, scale)</code></td>
-<td>numeric</td>
-<td>arbitrary precision numbers</td>
-<td>
-<code>123.45</code>, <code>-567.89</code>
-</td>
-</tr>
-<tr>
-<td><code>timestamp</code></td>
-<td>date/time</td>
-<td>date and time</td>
-<td><code>1999-01-08 04:05:06</code></td>
-</tr>
-<tr>
-<td><code>date</code></td>
-<td>date/time</td>
-<td>only a date</td>
-<td><code>1999-01-08</code></td>
-</tr>
-<tr>
-<td><code>boolean</code></td>
-<td>boolean</td>
-<td>true or false</td>
-<td>
-<code>true</code>, <code>false</code>
-</td>
-</tr>
-</tbody>
+* `varchar(length)`
+ * Type: character
+ * Value: up to `length` number of characters
+ * Example: `canoe`
+
+* `text`
+  * Type: character
+  * Value: unlimited length of text
+  * Example: `A long string of text`
+
+* `integer`
+  * Type: numeric
+  * Value: whole numbers
+  * Example: `42`, `-1423290`
+
+* `real`
+  * Type: numeric
+  * Value: floating point numbers
+  * Example: `24.563`, `-14924.3515`
+
+* `decimal(precision, scale)`
+  * Type: numeric
+  * Value: arbitrary precision numbers
+  * Example: `123.45`, `-567.89`
+
+* `timestamp`
+  * Type: date/time
+  * Value: data and time
+  * Example: `1999-01-08 04:05:06`
+
+* `date`
+  * Type: data/time
+  * Value: only a date
+  * Example: `1999-01-08`
+
+* `boolean`
+  * Type: boolean
+  * Value: true or false
+  * `true`, `false`
+
+* `text` is specific to PostgresSQL and not part of SQL standard
+* Using `text` is in many cases preferable to using `character(n)` or `varchar(n)`
+* No performance difference with `varchar(n)`, improvement over `character(n)`
+
+* `integer` can only store values between -2147483648 and +2147483647
+
+<h2>NULL</h2>
+
+* NULL represents nothing, absence of any other value.
+* In SQL `NULL` will return `NULL` instead of true or false when used on either side of comparison operators.
+
+* When dealing with `NULL` always use `IS NULL` or `IS NOT NULL` constructs.
+
+<h1>Loading Database Dumps</h2>
+
+* Files will contain a list SQL statements just as if they had been typed out manually.
+
+* Two ways to load SQL files into a PostgresSQL database.
+
+<h2>psql</h2>
+
+```bash
+$ psql -d my_database < file_to_import.sql
+```
+
+* This will execute the SQL statements with `file_to_import.sql` within `my_database`
+
+* If you're already running a `psql` session, you can import a SQL file using the `\i` meta command.
+
+```sql
+my_database+# \i ~/some/files/file_to_import.sql
+```
+
+* To dump a database:
+
+```bash
+$ pg_dump -d database_name -t table_name --inserts > new_file.sql
+```
+
+* Three ways to use schema to restrict what values can be stored in a column
+
+1. Data type (which can include a length limitation)
+2. NOT NULL constraint
+3. Check constraint
+
+
+* A key uniquely identifies a single row in a database table.
+
+* A natural key is an existing value in a dataset that can be used to uniquely identify each row in that dataset.
+
+* Some values that seem like solutions: phone number, email addresss, social security, product number.
+
+* Surrogate key is a value that is created soley for the purpose of identifying a row of data in a database table.
+
+* The most common surrogate key is the auto-incrementing integer.
+
+* Common to call a surrogate key created for a table `id`
+
+```sql
+-- This statement:
+CREATE TABLE colors (id serial, name text);
+
+-- is actually interpreted as if it were this one:
+CREATE SEQUENCE colors_id_seq;
+CREATE TABLE colors (
+    id integer NOT NULL DEFAULT nextval('colors_id_seq'),
+    name text
+);
+```
+
+* Sequence is a special kind of relation that generates a series of numbers. A sequence will remember the last number it generated, so it will generate numbers in a predetermined sequence automatically.
+
+* You can use `nexval` in a `SELECT` statement
+
+* Once a number is returned by `nextval` for a standard sequence, it will not be returned again, regardless of whether the value was stored in a row or not.
+
+```sql
+CREATE TABLE more_colors (id serial PRIMARY KEY, name text);
+```
+
+* By specifying `PRIMARY KEY`, PostgreSQL will create an index on that column that enforces it holding unique values in addition to preventing the column from holding NULL values.
+
+1. All tables should have a primary key column called `id`
+2. The `id` column should automatically be set to a unique value as new rows are inserted into the table.
+3. the `id` column will often be an integer, but there are other data types (like UUIDs) that can provide specific benefits.
+
+* Do not have to declare a column `PRIMARY KEY`, but it's a good idea to do so.
+
+* UUIDs - very large number that are used to identify individual objects or, when working with a database, rows in a database.
+
+* Often represented with hexadecimal strings with dashes.
