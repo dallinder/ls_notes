@@ -93,3 +93,19 @@ ALTER TABLE orders ADD CONSTRAINT orders_product_id_fkey FOREIGN KEY (product_id
 
 * Normalization - the process of designing schema that minimize or eliminate the possible occurance of update, insertion, and deletion anomalies.
 * The procedure of normalization involves extracting data into additonal tables and using foreing keys to tie it backto its associated data.
+
+
+* You can make a back-up of your database before you delete it by running the following command:
+
+```bash
+$ pg_dump --inserts database_name > database_name.dump.sql
+```
+
+<h1>Many to Many relationships</h1>
+
+* Relationships are those where there can be multiple instances on both sides of the relationship.
+* A table used to persist the state of many-to-many relationships is called a join table.
+
+* Should join tables include a primary key column?
+  * Depends if it makes sense for your application.
+  * Rails framework suggests that all join tables.
